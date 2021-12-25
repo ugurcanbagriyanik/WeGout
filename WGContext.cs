@@ -17,21 +17,22 @@ namespace WeGout
         public DbSet<User> User { get; set; }
         public DbSet<Place> Place { get; set; }
         public DbSet<Owner> Owner { get; set; }
+        //public DbSet<Menu> Menu { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CL_Gender>().HasData(
-               new CL_Gender() { Name = "None",Id=1},
-               new CL_Gender() { Name = "Female",Id=2},
-               new CL_Gender() { Name = "Male",Id=3}
-           ); 
+               new CL_Gender() { Name = "None", Id = 1 },
+               new CL_Gender() { Name = "Female", Id = 2 },
+               new CL_Gender() { Name = "Male", Id = 3 }
+           );
             modelBuilder.Entity<FileStorage>().HasData(
-               new FileStorage() { Name="none",Extension="jpg",Path="none",Id=1}
+               new FileStorage() { Name = "none", Extension = "jpg", Path = "none", Id = 1 }
            );
             modelBuilder.Entity<User>().HasData(
-                new User() { Id=1,Name = "Ugurcan", Surname="Bagriyanik", Email="ugur@wegout.com", GenderId=1,PhoneNumber="05398478481",Password="12345",ProfilePhotoId=1}
+                new User() { Id = 1, Name = "Ugurcan", Surname = "Bagriyanik", Email = "ugur@wegout.com", GenderId = 1, PhoneNumber = "05398478481", Password = "12345", ProfilePhotoId = 1 }
                 );
-            
+
         }
 
         public void Reset()

@@ -3,7 +3,9 @@ using WeGout;
 using WeGout.MapperProfiles;
 using WeGout.Interfaces;
 using WeGout.Services;
-using AutoMapper;
+using WeGout.Helpers;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WGContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WGContext"),ob=>ob.UseNetTopologySuite()));
@@ -13,7 +15,33 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setup =>
+{
+    // Include 'SecurityScheme' to use JWT Authentication
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+
+});
 
 
 builder.Services.AddAutoMapper(
@@ -43,6 +71,8 @@ using (var serviceScope = app.Services
         context.Database.Migrate();
     }
 }
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
 

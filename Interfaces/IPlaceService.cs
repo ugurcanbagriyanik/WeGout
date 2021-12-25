@@ -8,6 +8,7 @@ namespace WeGout.Interfaces
         Task<WGResponse<Paging<PlaceDto>>> GetPlaceList(Paging pagingParameters);
         Task<WGResponse<PlaceDto>> GetPlaceById(int id);
         Task<WGResponse> AddPlace(PlaceRequest placeRequest);
+        Task<WGResponse> DeletePlaceById(int id);
 
     }
 }

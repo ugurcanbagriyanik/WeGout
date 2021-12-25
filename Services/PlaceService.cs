@@ -30,10 +30,11 @@ namespace WeGout.Services
             try
             {
                 response.Data = await _context.Place.Include(l => l.BannerPhoto).ToPagingAsync<Place, PlaceDto>(pagingParameters, _mapper);
+                response.SetSuccess(OperationMessages.Success);
             }
             catch (Exception e)
             {
-
+                response.SetError(OperationMessages.DbError);
             }
 
             return response;
@@ -63,6 +64,30 @@ namespace WeGout.Services
                 await _context.AddAsync(_mapper.Map<Place>(placeRequest));
                 await _context.SaveChangesAsync();
                 response.SetSuccess();
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
+        
+        public async Task<WGResponse> DeletePlaceById(int id)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                var user = await _context.Place.Where(l => l.Id == id).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    _context.Remove(user);
+                    response.SetSuccess();
+                }
+                else
+                {
+                    response.SetError(OperationMessages.DbItemNotFound);
+                }
             }
             catch (Exception e)
             {

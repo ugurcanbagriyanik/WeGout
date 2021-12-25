@@ -5,6 +5,10 @@ using WeGout.Interfaces;
 using WeGout.Helpers;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace WeGout.Services
 {
@@ -16,12 +20,14 @@ namespace WeGout.Services
         private readonly ILogger<UserService> _logger;
         private readonly IMapper _mapper;
         private readonly WGContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UserService(ILogger<UserService> logger, WGContext context, IMapper mapper)
+        public UserService(ILogger<UserService> logger, WGContext context, IMapper mapper,IConfiguration configuration)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
+            _configuration=configuration;
         }
 
         public async Task<WGResponse<Paging<UserDto>>> GetUserList(Paging pagingParameters)
@@ -39,7 +45,7 @@ namespace WeGout.Services
             return response;
         }
 
-        public async Task<WGResponse<UserDto>> GetUserById(int id)
+        public async Task<WGResponse<UserDto>> GetUserById(long id)
         {
             WGResponse<UserDto> response = new WGResponse<UserDto>();
             try
@@ -71,5 +77,65 @@ namespace WeGout.Services
 
             return response;
         }
+
+        public async Task<WGResponse> DeleteUserById(int id)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                var user = await _context.User.Where(l => l.Id == id).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    _context.Remove(user);
+                    response.SetSuccess();
+                }
+                else
+                {
+                    response.SetError(OperationMessages.DbItemNotFound);
+                }
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
+
+        public async Task<WGResponse<AuthenticateResponse>> Login(AuthenticateRequest model)
+        {
+            WGResponse<AuthenticateResponse> response = new WGResponse<AuthenticateResponse>();
+            var userEnt = await _context.User.FirstOrDefaultAsync(x => x.Email == model.Email && x.Password == model.Password);
+
+            if (userEnt == null)
+            {
+                response.SetError(OperationMessages.AuthenticateError);
+            }
+            else
+            {
+                var user = _mapper.Map<User, UserDto>(userEnt);
+                var token = generateJwtToken(user);
+                response.Data = new AuthenticateResponse(user, token);
+                response.SetSuccess();
+            }
+
+            return response;
+        }
+
+        private string generateJwtToken(UserDto user)
+        {
+            // generate token that is valid for 7 days
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetValue<string>("JWT:Secret"));
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
     }
 }

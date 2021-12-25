@@ -5,6 +5,7 @@ namespace WeGout.Helpers
         public const string GeneralError = "Hata nedeniyle işleminiz gerçekleştirilemedi";
 
         public const string DbError = "Veritabanı hatası nedeni ile işlem gerçekleştirilemedi";
+        public const string AuthenticateError = "Yanlış kullanıcı adı veya şifre";
 
         public const string DbItemNotFound = "Güncellenecek kayıt bilgisi bulunamadığından işlem gerçekleştirilemedi";
 

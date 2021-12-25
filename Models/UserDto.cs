@@ -29,4 +29,32 @@ namespace WeGout.Models
         public string Password { get; set; } = string.Empty;
 
     }
+
+    public class AuthenticateRequest
+    {
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+    }
+
+    public class AuthenticateResponse
+    {
+        public long Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Token { get; set; }
+
+
+        public AuthenticateResponse(UserDto user, string token)
+        {
+            Id = user.Id;
+            FirstName = user.Name;
+            LastName = user.Surname;
+            Email = user.Email;
+            Token = token;
+        }
+    }
 }
