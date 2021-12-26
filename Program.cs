@@ -8,7 +8,16 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<WGContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("WGContext"),ob=>ob.UseNetTopologySuite()));
+
+builder.Services.AddDbContext<WGContext>(o => 
+{
+    o.UseNpgsql(builder.Configuration.GetConnectionString("WGContext"),
+     ob =>
+     {
+         ob.UseNetTopologySuite();
+     });
+});
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -58,9 +67,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+}
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
 using (var serviceScope = app.Services
     .GetRequiredService<IServiceScopeFactory>()

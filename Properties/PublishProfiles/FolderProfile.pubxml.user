@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Publish\wegout</_PublishTargetUrl>
+    <History>True|2021-12-25T15:10:41.8590059Z;True|2021-12-25T18:10:27.5897404+03:00;True|2021-12-25T17:58:52.7900037+03:00;True|2021-12-25T17:42:25.6793517+03:00;True|2021-12-25T17:42:03.1713643+03:00;</History>
+  </PropertyGroup>
+</Project>

@@ -9,7 +9,6 @@ namespace WeGout.Entities
         [Key]
         public long Id { get; set; }
 
-        [DefaultValue("")]
         [StringLength(20, ErrorMessage = "Bu alan 20 karakterden fazla olamaz.")]
         public string Name { get; set; } = "";
     }

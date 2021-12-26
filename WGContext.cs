@@ -22,9 +22,9 @@ namespace WeGout
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CL_Gender>().HasData(
-               new CL_Gender() { Name = "None", Id = 1 },
-               new CL_Gender() { Name = "Female", Id = 2 },
-               new CL_Gender() { Name = "Male", Id = 3 }
+               new CL_Gender() {Id = 1, Name = "None"  },
+               new CL_Gender() {Id = 2, Name = "Female"  },
+               new CL_Gender() {  Id = 3, Name = "Male"}
            );
             modelBuilder.Entity<FileStorage>().HasData(
                new FileStorage() { Name = "none", Extension = "jpg", Path = "none", Id = 1 }
