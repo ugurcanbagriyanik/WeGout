@@ -6,7 +6,7 @@ using WeGout.Interfaces;
 namespace WeGout.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PlaceController : ControllerBase
     {
 

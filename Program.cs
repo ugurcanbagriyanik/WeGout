@@ -18,6 +18,15 @@ builder.Services.AddDbContext<WGContext>(o =>
      });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyPolicy",
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+});
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -57,6 +66,7 @@ builder.Services.AddAutoMapper(
     typeof(UserProfile),
     typeof(PlaceProfile)
     );
+    
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPlaceService, PlaceService>();
 
@@ -80,7 +90,7 @@ using (var serviceScope = app.Services
         context.Database.Migrate();
     }
 }
-
+app.UseCors("MyPolicy");
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
