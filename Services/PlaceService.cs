@@ -72,7 +72,7 @@ namespace WeGout.Services
 
             return response;
         }
-        
+
         public async Task<WGResponse> DeletePlaceById(int id)
         {
             WGResponse response = new WGResponse();
