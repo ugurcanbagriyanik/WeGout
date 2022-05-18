@@ -34,7 +34,7 @@ namespace WeGout.Controllers
             return await _userService.GetUserById(id);
         }
 
-        [AdminRequired]
+        // [AdminRequired]
         [HttpPost("AddUser")]
         public async Task<WGResponse> AddUser([FromBody] UserRequest userRequest)
         {
