@@ -24,12 +24,12 @@ namespace WeGout.Services
             _mapper = mapper;
         }
 
-        public async Task<WGResponse<Paging<PlaceDto>>> GetPlaceList(Paging pagingParameters)
+        public async Task<WGResponse<Paging<PlaceShortDef>>> GetPlaceList(Paging pagingParameters)
         {
-            WGResponse<Paging<PlaceDto>> response = new WGResponse<Paging<PlaceDto>>();
+            WGResponse<Paging<PlaceShortDef>> response = new WGResponse<Paging<PlaceShortDef>>();
             try
             {
-                response.Data = await _context.Place.Include(l => l.BannerPhoto).ToPagingAsync<Place, PlaceDto>(pagingParameters, _mapper);
+                response.Data = await _context.Place.Include(l => l.BannerPhoto).ToPagingAsync<Place, PlaceShortDef>(pagingParameters, _mapper);
                 response.SetSuccess(OperationMessages.Success);
             }
             catch (Exception e)
@@ -38,6 +38,34 @@ namespace WeGout.Services
             }
 
             return response;
+        }        
+        public async Task<WGResponse<List<PlaceShortDef>>> GetPlaceListViaIntersect(string wkt)
+        {
+            WGResponse<List<PlaceShortDef>> response = new WGResponse<List<PlaceShortDef>>();
+            try
+            {
+                var sqlScript = "select p.\"Id\",p.\"Name\",st_astext(\"Location\") as LocationWkt,"+
+                                "\"Category\",FS.\"Path\" BannerPhoto from \"Place\" p " +
+                                "inner join \"FileStorage\" FS on FS.\"Id\" = p.\"BannerPhotoId\" "+
+                                "where st_intersects(\"Location\",st_geomfromtext('" +wkt+"'"+
+                                ",4326))";
+                // response.Data = await _context.Place.FromSqlRaw(sqlScript).ToListAsync();
+                // response.Data = _context.ExecSQL<PlaceShortDef>(sqlScript);
+                response.Data = await _context.Database.SqlQueryAsync<List<PlaceShortDef>>(sqlScript);
+                response.SetSuccess(OperationMessages.Success);
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
+        
+
+        private async Task<string> GetIntersectString(string wkt)
+        {
+            return "";
         }
 
         public async Task<WGResponse<PlaceDto>> GetPlaceById(int id)

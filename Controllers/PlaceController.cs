@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WeGout.Entities;
 using WeGout.Models;
 using WeGout.Helpers;
 using WeGout.Interfaces;
@@ -22,9 +23,16 @@ namespace WeGout.Controllers
 
         [LoginRequired]
         [HttpGet("GetPlaceList")]
-        public async Task<WGResponse<Paging<PlaceDto>>> GetPlaceList([FromQuery] Paging pagingParameters)
+        public async Task<WGResponse<Paging<PlaceShortDef>>> GetPlaceList([FromQuery] Paging pagingParameters)
         {
             return await _placeService.GetPlaceList(pagingParameters);
+        }        
+        
+        // [LoginRequired]
+        [HttpGet("GetPlaceListViaIntersect")]
+        public async Task<WGResponse<List<PlaceShortDef>>> GetPlaceListViaIntersect([FromQuery] string wkt)
+        {
+            return await _placeService.GetPlaceListViaIntersect(wkt);
         }
 
         [LoginRequired]

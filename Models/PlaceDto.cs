@@ -24,5 +24,15 @@ namespace WeGout.Models
         public string Category { get; set; } = string.Empty;
 
     }
+    
+    public class PlaceShortDef
+    {
+        public long Id { get; set; }=0;
+        public string Name { get; set; } = string.Empty;
+        public string LocationWkt { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string BannerPhoto { get; set; }=string.Empty;
+
+    }
 
 }
