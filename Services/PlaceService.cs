@@ -63,24 +63,37 @@ namespace WeGout.Services
         }
         
 
-        private async Task<string> GetIntersectString(string wkt)
-        {
-            return "";
-        }
-
         public async Task<WGResponse<PlaceDto>> GetPlaceById(int id)
         {
             WGResponse<PlaceDto> response = new WGResponse<PlaceDto>();
             try
             {
-                var user = await _context.Place.Include(l => l.BannerPhoto).Where(l => l.Id == id).FirstOrDefaultAsync();
-                response.Data = _mapper.Map<PlaceDto>(user);
+                var place = await _context.Place.Include(l => l.BannerPhoto).Where(l => l.Id == id).FirstOrDefaultAsync();
+                response.Data = _mapper.Map<PlaceDto>(place);
             }
             catch (Exception e)
             {
 
             }
 
+            return response;
+        }
+
+        public async Task<WGResponse<List<PlaceShortDef>>> GetOwnersPlaces(long userId)
+        {
+            WGResponse<List<PlaceShortDef>> response = new WGResponse<List<PlaceShortDef>>();
+            try
+            {
+                var places = await _context.Owner.Include(l => l.Place).Where(l => l.UserId == userId)
+                    .Select(l => l.Place).ToListAsync();
+                response.Data = _mapper.Map<List<PlaceShortDef>>(places);
+                response.SetSuccess();
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+            
             return response;
         }
 

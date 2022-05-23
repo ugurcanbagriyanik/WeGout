@@ -14,6 +14,7 @@ namespace WeGout.Models
         public long Coin { get; set; }=0;
         public string Gender { get; set; } = string.Empty;
         public string ProfilePhoto { get; set; } = string.Empty;
+        public List<PlaceShortDef>? Places { get; set; } = null;
 
     }
 

@@ -11,6 +11,7 @@ namespace WeGout.Interfaces
         Task<WGResponse> AddPlace(PlaceRequest placeRequest);
         Task<WGResponse> DeletePlaceById(int id);
         Task<WGResponse<List<PlaceShortDef>>> GetPlaceListViaIntersect(string wkt);
+        Task<WGResponse<List<PlaceShortDef>>> GetOwnersPlaces(long userId);
 
 
     }

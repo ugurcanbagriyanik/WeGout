@@ -39,7 +39,7 @@ namespace WeGout.Services
             }
             catch (Exception e)
             {
-
+                response.SetError(OperationMessages.DbError);
             }
 
             return response;
@@ -55,7 +55,27 @@ namespace WeGout.Services
             }
             catch (Exception e)
             {
+                response.SetError(OperationMessages.DbError);
+            }
 
+            return response;
+        }    
+        
+        public async Task<WGResponse<UserDto>> GetUserProfile(long id)
+        {
+            WGResponse<UserDto> response = new WGResponse<UserDto>();
+            try
+            {
+                var user = await _context.User.Include(l => l.Gender).Include(l => l.ProfilePhoto).Where(l => l.Id == id).FirstOrDefaultAsync();
+                response.Data = _mapper.Map<UserDto>(user);
+                var places=await _context.Owner.Include(l => l.Place).Where(l => l.UserId == id)
+                    .Select(l => l.Place).ToListAsync();
+                response.Data.Places=_mapper.Map<List<PlaceShortDef>>(places);
+                response.SetSuccess();
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
             }
 
             return response;

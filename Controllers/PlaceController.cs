@@ -54,6 +54,16 @@ namespace WeGout.Controllers
         public async Task<WGResponse> DeletePlaceById(int id)
         {
             return await _placeService.DeletePlaceById(id);
+        }        
+        
+        [LoginRequired]
+        [HttpGet("GetOwnersPlaces")]
+        public async Task<WGResponse<List<PlaceShortDef>>> GetOwnersPlaces()
+        {
+            var id = (HttpContext.Items["User"] as UserDto).Id;
+            return await _placeService.GetOwnersPlaces(id);
         }
+        
+        
     }
 }

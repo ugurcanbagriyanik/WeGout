@@ -33,6 +33,14 @@ namespace WeGout.Controllers
         {
             return await _userService.GetUserById(id);
         }
+        
+        [LoginRequired]
+        [HttpGet("GetUserProfile")]
+        public async Task<WGResponse<UserDto>> GetUserProfile()
+        {
+            var id = (HttpContext.Items["User"] as UserDto).Id;
+            return await _userService.GetUserProfile(id);
+        }
 
         // [AdminRequired]
         [HttpPost("AddUser")]
