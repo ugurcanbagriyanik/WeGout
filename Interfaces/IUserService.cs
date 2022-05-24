@@ -11,6 +11,7 @@ namespace WeGout.Interfaces
         Task<WGResponse> DeleteUserById(int id);
         Task<WGResponse<AuthenticateResponse>> Login(AuthenticateRequest model);
         Task<WGResponse<UserDto>> GetUserProfile(long id);
+        Task<WGResponse> UpdateUser(UserDto userDto);
 
     }
 }

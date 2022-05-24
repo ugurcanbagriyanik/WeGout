@@ -54,6 +54,13 @@ namespace WeGout.Controllers
         public async Task<WGResponse> DeletePlaceById(int id)
         {
             return await _placeService.DeletePlaceById(id);
+        }                
+        
+        [LoginRequired]
+        [HttpPost("UpdatePlace")]
+        public async Task<WGResponse> UpdatePlace([FromBody] PlaceDto placeDto)
+        {
+            return await _placeService.UpdatePlace(placeDto);
         }        
         
         [LoginRequired]

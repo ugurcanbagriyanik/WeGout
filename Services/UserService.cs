@@ -121,6 +121,34 @@ namespace WeGout.Services
 
             return response;
         }
+        
+        public async Task<WGResponse> UpdateUser(UserDto userDto)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                var user = await _context.User.Where(l => l.Id == userDto.Id).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    user.Name = userDto.Name;
+                    user.Surname = userDto.Surname;
+                    user.Email = userDto.Email;
+                    user.PhoneNumber = userDto.PhoneNumber;
+                    await _context.SaveChangesAsync();
+                    response.SetSuccess();
+                }
+                else
+                {
+                    response.SetError(OperationMessages.DbItemNotFound);
+                }
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
 
         public async Task<WGResponse<AuthenticateResponse>> Login(AuthenticateRequest model)
         {

@@ -137,5 +137,34 @@ namespace WeGout.Services
 
             return response;
         }
+        
+        public async Task<WGResponse> UpdatePlace(PlaceDto placeDto)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                var place = await _context.Place.Where(l => l.Id == placeDto.Id).FirstOrDefaultAsync();
+                if (place != null)
+                {
+                    place.Name = placeDto.Name;
+                    place.Address = placeDto.Address;
+                    place.Category = placeDto.Category;
+                    place.PhoneNumber = placeDto.PhoneNumber;
+                    await _context.SaveChangesAsync();
+                    
+                    response.SetSuccess();
+                }
+                else
+                {
+                    response.SetError(OperationMessages.DbItemNotFound);
+                }
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
     }
 }

@@ -48,6 +48,13 @@ namespace WeGout.Controllers
         {
             return await _userService.AddUser(userRequest);
         }
+        
+        [LoginRequired]
+        [HttpPost("UpdateUser")]
+        public async Task<WGResponse> UpdateUser([FromBody] UserDto userDto)
+        {
+            return await _userService.UpdateUser(userDto);
+        }
 
 
         [LoginRequired]
