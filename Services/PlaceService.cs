@@ -175,7 +175,10 @@ namespace WeGout.Services
                 FavPlaces favPlace = new FavPlaces();
                 favPlace.PlaceId = placeId;
                 favPlace.UserId = userId;
+                favPlace.User = null;
+                favPlace.Place= null;                                                                                                       
                 await _context.AddAsync(favPlace);
+                await _context.SaveChangesAsync();
                 response.SetSuccess(OperationMessages.Success);
             }
             catch (Exception e)
@@ -186,15 +189,16 @@ namespace WeGout.Services
             return response;
         }
         
-        public async Task<WGResponse> DeleteFavPlaceById(long id)
+        public async Task<WGResponse> DeleteFavPlaceById(long placeId,long userId)
         {
             WGResponse response = new WGResponse();
             try
             {
-                var favPlace = await _context.FavPlaces.Where(l => l.Id == id).FirstOrDefaultAsync();
+                var favPlace = await _context.FavPlaces.Where(l => l.UserId == userId && l.PlaceId==placeId).FirstOrDefaultAsync();
                 if (favPlace != null)
                 {
                     _context.Remove(favPlace);
+                    await _context.SaveChangesAsync();
                     response.SetSuccess();
                 }
                 else

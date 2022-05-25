@@ -57,10 +57,11 @@ namespace WeGout.Controllers
         }      
         
         [LoginRequired]
-        [HttpGet("DeleteFavPlaceById/{id}")]
-        public async Task<WGResponse> DeleteFavPlaceById(int id)
+        [HttpGet("DeleteFavPlaceById/{placeId}")]
+        public async Task<WGResponse> DeleteFavPlaceById(int placeId)
         {
-            return await _placeService.DeleteFavPlaceById(id);
+            var userId = (HttpContext.Items["User"] as UserDto).Id;
+            return await _placeService.DeleteFavPlaceById(placeId,userId);
         }    
         
         [LoginRequired]
