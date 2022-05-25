@@ -68,10 +68,10 @@ namespace WeGout.Services
             {
                 var user = await _context.User.Include(l => l.Gender).Include(l => l.ProfilePhoto).Where(l => l.Id == id).FirstOrDefaultAsync();
                 response.Data = _mapper.Map<UserDto>(user);
-                var places=await _context.Owner.Include(l => l.Place).Where(l => l.UserId == id)
-                    .Select(l => l.Place).ToListAsync();
-                var favPlaces=await _context.FavPlaces.Include(l => l.Place).Where(l => l.UserId == id)
-                    .Select(l => l.Place).ToListAsync();
+                var places=await _context.Owner.Include(l => l.Place).ThenInclude(l=>l.BannerPhoto).Where(l => l.UserId == id)
+                    .Select(l => l.Place).OrderBy(l=>l.Name).ToListAsync();
+                var favPlaces=await _context.FavPlaces.Include(l => l.Place).ThenInclude(l=>l.BannerPhoto).Where(l => l.UserId == id)
+                    .Select(l => l.Place).OrderBy(l=>l.Name).ToListAsync();
                 response.Data.Places=_mapper.Map<List<PlaceShortDef>>(places);
                 response.Data.FavPlaces=_mapper.Map<List<PlaceShortDef>>(favPlaces);
                 response.SetSuccess();

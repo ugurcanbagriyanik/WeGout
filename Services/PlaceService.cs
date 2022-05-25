@@ -29,7 +29,7 @@ namespace WeGout.Services
             WGResponse<Paging<PlaceShortDef>> response = new WGResponse<Paging<PlaceShortDef>>();
             try
             {
-                response.Data = await _context.Place.Include(l => l.BannerPhoto).ToPagingAsync<Place, PlaceShortDef>(pagingParameters, _mapper);
+                response.Data = await _context.Place.Include(l => l.BannerPhoto).OrderBy(l=>l.Name).ToPagingAsync<Place, PlaceShortDef>(pagingParameters, _mapper);
                 response.SetSuccess(OperationMessages.Success);
             }
             catch (Exception e)
