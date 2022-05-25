@@ -13,6 +13,8 @@ namespace WeGout.Interfaces
         Task<WGResponse<List<PlaceShortDef>>> GetPlaceListViaIntersect(string wkt);
         Task<WGResponse<List<PlaceShortDef>>> GetOwnersPlaces(long userId);
         Task<WGResponse> UpdatePlace(PlaceDto placeDto);
+        Task<WGResponse> AddToFavPlace(long placeId, long userId);
+        Task<WGResponse> DeleteFavPlaceById(long id);
 
 
     }

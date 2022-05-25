@@ -166,5 +166,48 @@ namespace WeGout.Services
 
             return response;
         }
+        
+        public async Task<WGResponse> AddToFavPlace(long placeId,long userId)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                FavPlaces favPlace = new FavPlaces();
+                favPlace.PlaceId = placeId;
+                favPlace.UserId = userId;
+                await _context.AddAsync(favPlace);
+                response.SetSuccess(OperationMessages.Success);
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
+        
+        public async Task<WGResponse> DeleteFavPlaceById(long id)
+        {
+            WGResponse response = new WGResponse();
+            try
+            {
+                var favPlace = await _context.FavPlaces.Where(l => l.Id == id).FirstOrDefaultAsync();
+                if (favPlace != null)
+                {
+                    _context.Remove(favPlace);
+                    response.SetSuccess();
+                }
+                else
+                {
+                    response.SetError(OperationMessages.DbItemNotFound);
+                }
+            }
+            catch (Exception e)
+            {
+                response.SetError(OperationMessages.DbError);
+            }
+
+            return response;
+        }
     }
 }
