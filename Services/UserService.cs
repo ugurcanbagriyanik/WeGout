@@ -70,7 +70,10 @@ namespace WeGout.Services
                 response.Data = _mapper.Map<UserDto>(user);
                 var places=await _context.Owner.Include(l => l.Place).Where(l => l.UserId == id)
                     .Select(l => l.Place).ToListAsync();
+                var favPlaces=await _context.FavPlaces.Include(l => l.Place).Where(l => l.UserId == id)
+                    .Select(l => l.Place).ToListAsync();
                 response.Data.Places=_mapper.Map<List<PlaceShortDef>>(places);
+                response.Data.FavPlaces=_mapper.Map<List<PlaceShortDef>>(favPlaces);
                 response.SetSuccess();
             }
             catch (Exception e)

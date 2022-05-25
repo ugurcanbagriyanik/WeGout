@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WeGout.Entities;
 
 namespace WeGout.Models
 {
@@ -15,6 +16,7 @@ namespace WeGout.Models
         public string Gender { get; set; } = string.Empty;
         public string ProfilePhoto { get; set; } = string.Empty;
         public List<PlaceShortDef>? Places { get; set; } = null;
+        public List<PlaceShortDef>? FavPlaces { get; set; } = null;
 
     }
 
