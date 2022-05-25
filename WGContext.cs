@@ -26,6 +26,7 @@ namespace WeGout
         public DbSet<User> User { get; set; }
         public DbSet<Place> Place { get; set; }
         public DbSet<Owner> Owner { get; set; }
+        public DbSet<FavPlaces> FavPlaces { get; set; }
         //public DbSet<Menu> Menu { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
